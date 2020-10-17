@@ -19,13 +19,13 @@ namespace BankAccount.Models
         public void Deposit(decimal amountToDeposit)
         {
             Balance += amountToDeposit;
-            Operations.Add(new Operation(OperationType.Deposit, amountToDeposit));
+            RegisterOperation(OperationType.Deposit, amountToDeposit);
         }
 
         public void Retrieve(decimal amountToRetrieve)
         {
             Balance -= amountToRetrieve;
-            Operations.Add(new Operation(OperationType.Retrieve, amountToRetrieve));
+            RegisterOperation(OperationType.Retrieve, amountToRetrieve);
         }
 
         public decimal GetBalance()
@@ -36,6 +36,11 @@ namespace BankAccount.Models
         public List<Operation> GetOperations()
         {
             return Operations;
+        }
+
+        private void RegisterOperation(OperationType type, decimal amount)
+        {
+            Operations.Add(new Operation(type, amount, Balance));
         }
     }
 }

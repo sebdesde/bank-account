@@ -72,7 +72,7 @@ namespace BankAccountUnitTests
             Account account = new Account();
             account.Deposit(18.15m);
             List<Operation> operations = account.GetOperations();
-            Operation expectedOperation = new Operation(OperationType.Deposit, 18.15m);
+            Operation expectedOperation = new Operation(OperationType.Deposit, 18.15m, 0);
             Assert.AreEqual(1, operations.Count);
             Assert.AreEqual(expectedOperation.Type, operations[0].Type);
             Assert.AreEqual(expectedOperation.Amount, operations[0].Amount);
@@ -85,7 +85,7 @@ namespace BankAccountUnitTests
             Account account = new Account(18.15m);
             account.Retrieve(5.42m);
             List<Operation> operations = account.GetOperations();
-            Operation expectedOperation = new Operation(OperationType.Retrieve, 5.42m);
+            Operation expectedOperation = new Operation(OperationType.Retrieve, 5.42m, 0);
             Assert.AreEqual(1, operations.Count);
             Assert.AreEqual(expectedOperation.Type, operations[0].Type);
             Assert.AreEqual(expectedOperation.Amount, operations[0].Amount);
@@ -101,10 +101,10 @@ namespace BankAccountUnitTests
             account.Retrieve(12.73m);
             account.Deposit(5.42m);
             List<Operation> operations = account.GetOperations();
-            Operation expectedFirstOperation = new Operation(OperationType.Deposit, 18.15m);
-            Operation expectedSecondOperation = new Operation(OperationType.Retrieve, 5.42m);
-            Operation expectedThirdOperation = new Operation(OperationType.Retrieve, 12.73m);
-            Operation expectedFourthOperation = new Operation(OperationType.Deposit, 5.42m);
+            Operation expectedFirstOperation = new Operation(OperationType.Deposit, 18.15m, 0);
+            Operation expectedSecondOperation = new Operation(OperationType.Retrieve, 5.42m, 0);
+            Operation expectedThirdOperation = new Operation(OperationType.Retrieve, 12.73m, 0);
+            Operation expectedFourthOperation = new Operation(OperationType.Deposit, 5.42m, 0);
             Assert.AreEqual(4, operations.Count);
             Assert.AreEqual(expectedFirstOperation.Type, operations[0].Type);
             Assert.AreEqual(expectedFirstOperation.Amount, operations[0].Amount);
@@ -114,6 +114,24 @@ namespace BankAccountUnitTests
             Assert.AreEqual(expectedThirdOperation.Amount, operations[2].Amount);
             Assert.AreEqual(expectedFourthOperation.Type, operations[3].Type);
             Assert.AreEqual(expectedFourthOperation.Amount, operations[3].Amount);
+        }
+
+        [Test]
+        public void Check_Operations_on_an_account_with_balance()
+        {
+            Account account = new Account(18.15m);
+            account.Deposit(18.15m);
+            account.Retrieve(5.42m);
+            List<Operation> operations = account.GetOperations();
+            Operation expectedFirstOperation = new Operation(OperationType.Deposit, 18.15m, 36.30m);
+            Operation expectedSecondOperation = new Operation(OperationType.Retrieve, 5.42m, 30.88m);
+            Assert.AreEqual(2, operations.Count);
+            Assert.AreEqual(expectedFirstOperation.Type, operations[0].Type);
+            Assert.AreEqual(expectedFirstOperation.Amount, operations[0].Amount);
+            Assert.AreEqual(expectedFirstOperation.Balance, operations[0].Balance);
+            Assert.AreEqual(expectedSecondOperation.Type, operations[1].Type);
+            Assert.AreEqual(expectedSecondOperation.Amount, operations[1].Amount);
+            Assert.AreEqual(expectedSecondOperation.Balance, operations[1].Balance);
         }
 
     }
