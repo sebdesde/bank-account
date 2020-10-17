@@ -9,16 +9,17 @@ namespace BankAccountUnitTests
         public void Deposit_5_euros_on_a_new_account()
         {
             Account account = new Account();
-            account.Amount += 5;
-            Assert.AreEqual(5, account.Amount);
+            account.Deposit(5);
+            Assert.AreEqual(5, account.GetBalance());
         }
 
         [Test]
         public void Deposit_5_42_euros_on_a_new_account()
         {
             Account account = new Account();
-            account.Amount += 5.42m;
-            Assert.AreEqual(5.42m, account.Amount);
+            account.Deposit(5.42m);
+            Assert.AreEqual(5.42m, account.GetBalance());
         }
+
     }
 }
