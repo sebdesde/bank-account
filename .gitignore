@@ -3,3 +3,6 @@
 ################################################################################
 
 /BankAccount/BankAccountUnitTests/obj
+/BankAccount/BankAccountUnitTests/bin/Debug/netcoreapp3.1
+/BankAccount/BankAccount/obj
+/BankAccount/BankAccount/bin/Debug/netcoreapp3.1
