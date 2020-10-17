@@ -22,14 +22,15 @@ namespace BankAccount.Models
             Operations.Add(new Operation(OperationType.Deposit, amountToDeposit));
         }
 
-        public decimal GetBalance()
-        {
-            return Balance;
-        }
-
         public void Retrieve(decimal amountToRetrieve)
         {
             Balance -= amountToRetrieve;
+            Operations.Add(new Operation(OperationType.Retrieve, amountToRetrieve));
+        }
+
+        public decimal GetBalance()
+        {
+            return Balance;
         }
 
         public List<Operation> GetOperations()
