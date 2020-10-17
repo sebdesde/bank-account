@@ -6,16 +6,26 @@ namespace BankAccount.Models
 {
     public class Account
     {
-        private decimal Amount { get; set; }
-
-        public void Deposit(decimal depositAmount)
+        public Account(decimal amount = 0)
         {
-            Amount += depositAmount;
+            Balance = amount;
+        }
+
+        private decimal Balance { get; set; }
+
+        public void Deposit(decimal amountToDeposit)
+        {
+            Balance += amountToDeposit;
         }
 
         public decimal GetBalance()
         {
-            return Amount;
+            return Balance;
+        }
+
+        public void Retrieve(decimal amountToRetrieve)
+        {
+            Balance -= amountToRetrieve;
         }
     }
 }

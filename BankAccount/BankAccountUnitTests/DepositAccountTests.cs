@@ -30,5 +30,21 @@ namespace BankAccountUnitTests
             Assert.AreEqual(18.15m, account.GetBalance());
         }
 
+        [Test]
+        public void Retrieve_12_73_euros_on_a_account_with_18_15_euros()
+        {
+            Account account = new Account(18.15m);
+            account.Retrieve(12.73m);
+            Assert.AreEqual(5.42m, account.GetBalance());
+        }
+
+        [Test]
+        public void Retrieve_5_42_euros_then_12_73_euros_on_a_account_with_27_18_euros()
+        {
+            Account account = new Account(27.18m);
+            account.Retrieve(5.42m);
+            account.Retrieve(12.73m);
+            Assert.AreEqual(9.03m, account.GetBalance());
+        }
     }
 }
