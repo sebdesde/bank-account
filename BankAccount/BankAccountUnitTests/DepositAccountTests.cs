@@ -10,7 +10,7 @@ namespace BankAccountUnitTests
         {
             Account account = new Account();
             account.Amount += 5;
-            Assert.Equals(5, account.Amount);
+            Assert.AreEqual(5, account.Amount);
         }
     }
 }
