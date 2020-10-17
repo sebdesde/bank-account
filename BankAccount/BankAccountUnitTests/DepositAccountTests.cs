@@ -21,5 +21,14 @@ namespace BankAccountUnitTests
             Assert.AreEqual(5.42m, account.GetBalance());
         }
 
+        [Test]
+        public void Deposit_5_42_euros_then_12_73_euros_on_a_new_account()
+        {
+            Account account = new Account();
+            account.Deposit(5.42m);
+            account.Deposit(12.73m);
+            Assert.AreEqual(18.15m, account.GetBalance());
+        }
+
     }
 }
