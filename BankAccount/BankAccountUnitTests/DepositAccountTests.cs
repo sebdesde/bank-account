@@ -1,5 +1,7 @@
 using BankAccount.Models;
 using NUnit.Framework;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BankAccountUnitTests
 {
@@ -54,5 +56,17 @@ namespace BankAccountUnitTests
             account.Retrieve(18.15m);
             Assert.AreEqual(-12.73m, account.GetBalance());
         }
+
+
+        [Test]
+        public void Check_Operations_on_a_new_account()
+        {
+            Account account = new Account();
+            account.Deposit(18.15m);
+            List<Operation> operations = account.GetOperations();
+            Assert.IsEmpty(operations);
+        }
+
+       
     }
 }

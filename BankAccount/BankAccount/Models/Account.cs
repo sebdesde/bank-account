@@ -6,12 +6,15 @@ namespace BankAccount.Models
 {
     public class Account
     {
+        private decimal Balance { get; set; }
+        private List<Operation> Operations { get; set; }
+
         public Account(decimal amount = 0)
         {
             Balance = amount;
+            Operations = new List<Operation>();
         }
 
-        private decimal Balance { get; set; }
 
         public void Deposit(decimal amountToDeposit)
         {
@@ -26,6 +29,11 @@ namespace BankAccount.Models
         public void Retrieve(decimal amountToRetrieve)
         {
             Balance -= amountToRetrieve;
+        }
+
+        public List<Operation> GetOperations()
+        {
+            return Operations;
         }
     }
 }
