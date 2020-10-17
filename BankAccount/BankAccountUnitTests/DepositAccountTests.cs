@@ -62,11 +62,20 @@ namespace BankAccountUnitTests
         public void Check_Operations_on_a_new_account()
         {
             Account account = new Account();
-            account.Deposit(18.15m);
             List<Operation> operations = account.GetOperations();
             Assert.IsEmpty(operations);
         }
 
-       
+        [Test]
+        public void Check_Operations_on_an_account_with_only_one_Deposit()
+        {
+            Account account = new Account();
+            account.Deposit(18.15m);
+            List<Operation> operations = account.GetOperations();
+            Assert.AreEqual(1, operations.Count);
+            Assert.AreEqual(OperationType.Deposit, operations[0].Type);
+            Assert.AreEqual(18.15m, operations[0].Amount);
+        }
+
     }
 }

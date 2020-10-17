@@ -19,6 +19,7 @@ namespace BankAccount.Models
         public void Deposit(decimal amountToDeposit)
         {
             Balance += amountToDeposit;
+            Operations.Add(new Operation(OperationType.Deposit, amountToDeposit));
         }
 
         public decimal GetBalance()
