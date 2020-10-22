@@ -1,4 +1,5 @@
 ﻿using BankAccount.Helpers;
+using System;
 using System.Collections.Generic;
 
 namespace BankAccount.Models
@@ -46,6 +47,14 @@ namespace BankAccount.Models
         private void RegisterOperation(OperationType type, decimal amount)
         {
             Operations.Add(new Operation(type, amount, Balance, DateTimeWrapper.GetDateTimeNow()));
+        }
+
+        public void ShowOperations()
+        {
+            foreach (Operation operation in Operations)
+            {
+                Console.WriteLine($"{operation.Date} / {operation.Type} / {operation.Amount} / {operation.Balance}");
+            }
         }
     }
 }

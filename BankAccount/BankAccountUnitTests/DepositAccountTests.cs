@@ -3,6 +3,7 @@ using BankAccountUnitTests.Helpers;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace BankAccountUnitTests
 {
@@ -159,6 +160,22 @@ namespace BankAccountUnitTests
             Assert.AreEqual(expectedSecondOperation.Date, operations[1].Date);
             Assert.AreEqual(expectedThirdOperation.Date, operations[2].Date);
             Assert.AreEqual(expectedFourthOperation.Date, operations[3].Date);
+        }
+
+        [Test]
+        public void Check_Show_Operations_on_an_account_with_multiple_retrieve_and_deposit()
+        {
+            FakeDateTimeWrapper fakeDateTimeWrapper = new FakeDateTimeWrapper();
+            Account account = new Account(18.15m, fakeDateTimeWrapper);
+            FakeDateTimeWrapper.Date = new DateTime(2020, 1, 1);
+            account.Deposit(18.15m);
+            FakeDateTimeWrapper.Date = new DateTime(2020, 1, 5);
+            account.Retrieve(5.42m);
+            TextWriter outputText = new StringWriter();
+            Console.SetOut(outputText);
+            account.ShowOperations();
+            string expectedoutputText = "01/01/2020 00:00:00 / Deposit / 18,15 / 36,30\r\n05/01/2020 00:00:00 / Retrieve / 5,42 / 30,88\r\n";
+            Assert.AreEqual(expectedoutputText, outputText.ToString());
         }
     }
 }
