@@ -1,7 +1,8 @@
 using BankAccount.Models;
+using BankAccountUnitTests.Helpers;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace BankAccountUnitTests
 {
@@ -72,7 +73,7 @@ namespace BankAccountUnitTests
             Account account = new Account();
             account.Deposit(18.15m);
             List<Operation> operations = account.GetOperations();
-            Operation expectedOperation = new Operation(OperationType.Deposit, 18.15m, 0);
+            Operation expectedOperation = new Operation(OperationType.Deposit, 18.15m, 0, DateTime.Now);
             Assert.AreEqual(1, operations.Count);
             Assert.AreEqual(expectedOperation.Type, operations[0].Type);
             Assert.AreEqual(expectedOperation.Amount, operations[0].Amount);
@@ -85,7 +86,7 @@ namespace BankAccountUnitTests
             Account account = new Account(18.15m);
             account.Retrieve(5.42m);
             List<Operation> operations = account.GetOperations();
-            Operation expectedOperation = new Operation(OperationType.Retrieve, 5.42m, 0);
+            Operation expectedOperation = new Operation(OperationType.Retrieve, 5.42m, 0, DateTime.Now);
             Assert.AreEqual(1, operations.Count);
             Assert.AreEqual(expectedOperation.Type, operations[0].Type);
             Assert.AreEqual(expectedOperation.Amount, operations[0].Amount);
@@ -101,10 +102,10 @@ namespace BankAccountUnitTests
             account.Retrieve(12.73m);
             account.Deposit(5.42m);
             List<Operation> operations = account.GetOperations();
-            Operation expectedFirstOperation = new Operation(OperationType.Deposit, 18.15m, 0);
-            Operation expectedSecondOperation = new Operation(OperationType.Retrieve, 5.42m, 0);
-            Operation expectedThirdOperation = new Operation(OperationType.Retrieve, 12.73m, 0);
-            Operation expectedFourthOperation = new Operation(OperationType.Deposit, 5.42m, 0);
+            Operation expectedFirstOperation = new Operation(OperationType.Deposit, 18.15m, 0, DateTime.Now);
+            Operation expectedSecondOperation = new Operation(OperationType.Retrieve, 5.42m, 0, DateTime.Now);
+            Operation expectedThirdOperation = new Operation(OperationType.Retrieve, 12.73m, 0, DateTime.Now);
+            Operation expectedFourthOperation = new Operation(OperationType.Deposit, 5.42m, 0, DateTime.Now);
             Assert.AreEqual(4, operations.Count);
             Assert.AreEqual(expectedFirstOperation.Type, operations[0].Type);
             Assert.AreEqual(expectedFirstOperation.Amount, operations[0].Amount);
@@ -123,8 +124,8 @@ namespace BankAccountUnitTests
             account.Deposit(18.15m);
             account.Retrieve(5.42m);
             List<Operation> operations = account.GetOperations();
-            Operation expectedFirstOperation = new Operation(OperationType.Deposit, 18.15m, 36.30m);
-            Operation expectedSecondOperation = new Operation(OperationType.Retrieve, 5.42m, 30.88m);
+            Operation expectedFirstOperation = new Operation(OperationType.Deposit, 18.15m, 36.30m, DateTime.Now);
+            Operation expectedSecondOperation = new Operation(OperationType.Retrieve, 5.42m, 30.88m, DateTime.Now);
             Assert.AreEqual(2, operations.Count);
             Assert.AreEqual(expectedFirstOperation.Type, operations[0].Type);
             Assert.AreEqual(expectedFirstOperation.Amount, operations[0].Amount);
@@ -134,5 +135,30 @@ namespace BankAccountUnitTests
             Assert.AreEqual(expectedSecondOperation.Balance, operations[1].Balance);
         }
 
+
+        [Test]
+        public void Check_Operations_Date_on_an_account_with_multiple_retrieve_and_deposit()
+        {
+            FakeDateTimeWrapper fakeDateTimeWrapper = new FakeDateTimeWrapper();
+            Account account = new Account(18.15m, fakeDateTimeWrapper);
+            FakeDateTimeWrapper.Date = new DateTime(2020,1,1);
+            account.Deposit(18.15m);
+            FakeDateTimeWrapper.Date = new DateTime(2020, 1, 5);
+            account.Retrieve(5.42m);
+            FakeDateTimeWrapper.Date = new DateTime(2020, 2, 12);
+            account.Retrieve(12.73m);
+            FakeDateTimeWrapper.Date = new DateTime(2020, 3, 3);
+            account.Deposit(5.42m);
+            List<Operation> operations = account.GetOperations();
+            Operation expectedFirstOperation = new Operation(OperationType.Deposit, 18.15m, 0, new DateTime(2020, 1, 1));
+            Operation expectedSecondOperation = new Operation(OperationType.Retrieve, 5.42m, 0, new DateTime(2020, 1, 5));
+            Operation expectedThirdOperation = new Operation(OperationType.Retrieve, 12.73m, 0, new DateTime(2020, 2, 12));
+            Operation expectedFourthOperation = new Operation(OperationType.Deposit, 5.42m, 0, new DateTime(2020, 3, 3));
+            Assert.AreEqual(4, operations.Count);
+            Assert.AreEqual(expectedFirstOperation.Date, operations[0].Date);
+            Assert.AreEqual(expectedSecondOperation.Date, operations[1].Date);
+            Assert.AreEqual(expectedThirdOperation.Date, operations[2].Date);
+            Assert.AreEqual(expectedFourthOperation.Date, operations[3].Date);
+        }
     }
 }

@@ -1,6 +1,5 @@
-﻿using System;
+﻿using BankAccount.Helpers;
 using System.Collections.Generic;
-using System.Text;
 
 namespace BankAccount.Models
 {
@@ -9,10 +8,16 @@ namespace BankAccount.Models
         private decimal Balance { get; set; }
         private List<Operation> Operations { get; set; }
 
-        public Account(decimal amount = 0)
+        private IDateTimeWrapper DateTimeWrapper;
+
+        public Account(decimal amount = 0, IDateTimeWrapper dateTimeWrapper = null)
         {
             Balance = amount;
             Operations = new List<Operation>();
+            if (dateTimeWrapper != null)
+                DateTimeWrapper = dateTimeWrapper;
+            else
+                DateTimeWrapper = new DateTimeWrapper();
         }
 
 
@@ -40,7 +45,7 @@ namespace BankAccount.Models
 
         private void RegisterOperation(OperationType type, decimal amount)
         {
-            Operations.Add(new Operation(type, amount, Balance));
+            Operations.Add(new Operation(type, amount, Balance, DateTimeWrapper.GetDateTimeNow()));
         }
     }
 }
